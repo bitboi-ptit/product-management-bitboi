@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const database = require("./config/database");
-const route = require("./routes/client/index.route");
+const clientRoute = require("./routes/client/index.route");
+const adminRoute = require("./routes/admin/index.route");
 
 require('dotenv').config(); 
 const port = process.env.PORT;
@@ -10,7 +11,8 @@ app.set('views', './views');
 app.set('view engine', 'pug');
 
 app.use(express.static("public"));
-route(app);
+clientRoute(app); 
+adminRoute(app);
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 })
