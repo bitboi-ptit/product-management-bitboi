@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model");
+//[Get] /products
 module.exports.index = async (req, res) => {
     //-Day la cac dieu loc
     const products = await Product.find({
