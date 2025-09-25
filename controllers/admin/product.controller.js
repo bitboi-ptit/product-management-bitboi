@@ -46,16 +46,33 @@ module.exports.changeStatus = async (req, res) => {
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
 }
+//[PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
-    await Product.updateMany({
-        _id: {
-            $in: ids
-        }
-    }, {
-        status: type
-    });
+    switch (type) {
+        case "active" || "inactive":
+            await Product.updateMany({
+                _id: {
+                    $in: ids
+                }
+            }, {
+                status: type
+            });
+            break;
+        case "delete-all":
+            await Product.updateMany({
+                _id: {
+                    $in: ids
+                }
+            }, {
+                deleted: true,
+                deletedAt: new Date()
+            });
+            break;
+        default:
+            break;
+    }
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
 
