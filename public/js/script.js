@@ -1,4 +1,4 @@
-//button-status
+//Search by button-status
 const buttonsStatus = document.querySelectorAll("[button-status]");
 
 if (buttonsStatus.length > 0) {

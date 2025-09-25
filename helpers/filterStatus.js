@@ -1,4 +1,4 @@
-//vẽ các button trạng từ backend
+//Dùng để vẽ các button trạng từ backend
 module.exports=(query)=>{
      let filterStatus = [{
             name: "All",
