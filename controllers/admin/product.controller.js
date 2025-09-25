@@ -69,7 +69,8 @@ module.exports.deleteItem = async (req, res) => {
     await Product.deleteOne({
         _id: id
     }, {
-        deleted: true
+        deleted: true,
+        deletedAt: new Date()
     });
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
