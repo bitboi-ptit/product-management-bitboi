@@ -95,16 +95,22 @@ if (formChangeMulti) {
                 return;
             }
         }
+
         if (inputsChecked.length > 0) {
             const inputIds = formChangeMulti.querySelector("input[name=ids]");
             let ids = [];
 
             inputsChecked.forEach(input => {
-                ids.push(input.value);
+                const id = input.value;
+                if (typeChange == "change-position") {
+                    const positon= input.closest("tr").querySelector("input[name=position]");
+                    ids.push(`${id}-${positon.value}`);
+                } else {
+                    ids.push(id);
+                }
             });
 
             inputIds.value = ids.join(", ");
-
             formChangeMulti.submit();
         } else {
             alert("Vui lòng chọn ít nhất một bản ghi!");

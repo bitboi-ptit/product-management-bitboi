@@ -3,12 +3,14 @@ const Product = require("../../models/product.model");
 module.exports.index = async (req, res) => {
     //-Day la cac dieu loc
     const products = await Product.find({
-        status :'active',
-        deleted : false
+        status: 'active',
+        deleted: false
+    }).sort({
+        position: "desc"
     });
-    console.log(products);
-    const newProducts = products.map((item)=>{
-        item.newPrice = (item.price - item.price*(item.discountPercentage/100)).toFixed(0);
+
+    const newProducts = products.map((item) => {
+        item.newPrice = (item.price - item.price * (item.discountPercentage / 100)).toFixed(0);
         return item;
     });
     console.log(newProducts);

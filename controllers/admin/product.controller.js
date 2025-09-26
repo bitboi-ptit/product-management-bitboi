@@ -25,7 +25,12 @@ module.exports.index = async (req, res) => {
         req.query,
         countProducts);
     //----------
-    const products = await Product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
+    const products = await Product.find(find)
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip)
+        .sort({
+            position: "desc"
+        });
     res.render("admin/pages/product/index", {
         pageTitle: "Trang danh sách sản phẩm",
         products: products,
@@ -70,14 +75,24 @@ module.exports.changeMulti = async (req, res) => {
                 deletedAt: new Date()
             });
             break;
-        default:
-            break;
+        case "change-position":
+            for (const item of ids) {
+                const [id, position] = item.split("-");
+                position = parseInt(position);
+                await Product.updateMany({
+                    id: id
+                }, {
+                    position: position
+                });
+            }
+            default:
+                break;
     }
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
 
 }
-
+//[DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
     // await Product.deleteOne({
