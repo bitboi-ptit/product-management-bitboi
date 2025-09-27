@@ -14,6 +14,7 @@ if (buttonsStatus.length > 0) {
             } else {
                 url.searchParams.delete("status");
             }
+            url.searchParams.set("page", 1);
             window.location.href = url.href;
         });
 
@@ -21,8 +22,8 @@ if (buttonsStatus.length > 0) {
 
 
 }
-
 //end button-status
+
 //form-search
 const formSearch = document.querySelector("#form-search");
 if (formSearch.length) {
@@ -35,6 +36,7 @@ if (formSearch.length) {
         } else {
             url.searchParams.delete("keyword");
         }
+        url.searchParams.set("page", 1);
         window.location.href = url.href;
     });
 }
@@ -103,7 +105,7 @@ if (formChangeMulti) {
             inputsChecked.forEach(input => {
                 const id = input.value;
                 if (typeChange == "change-position") {
-                    const positon= input.closest("tr").querySelector("input[name=position]");
+                    const positon = input.closest("tr").querySelector("input[name=position]");
                     ids.push(`${id}-${positon.value}`);
                 } else {
                     ids.push(id);
@@ -119,3 +121,18 @@ if (formChangeMulti) {
 
 }
 //End form change multi
+
+// show-alert
+const showAlert = document.querySelector("[show-alert]");
+if (showAlert) {
+    const time = parseInt(showAlert.getAttribute("data-time"));
+    const closeAlert = showAlert.querySelector("[close-alert]");
+    setTimeout(() => {
+        showAlert.classList.add("alert-hidden");
+    }, time);
+
+    closeAlert.addEventListener("click", () => {
+        showAlert.classList.add("alert-hidden");
+    });
+}
+// End show-alert

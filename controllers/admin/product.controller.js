@@ -26,11 +26,12 @@ module.exports.index = async (req, res) => {
         countProducts);
     //----------
     const products = await Product.find(find)
-        .limit(objectPagination.limitItems)
-        .skip(objectPagination.skip)
         .sort({
             position: "desc"
-        });
+        })
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip);
+
     res.render("admin/pages/product/index", {
         pageTitle: "Trang danh sách sản phẩm",
         products: products,
@@ -48,6 +49,9 @@ module.exports.changeStatus = async (req, res) => {
     }, {
         status: status
     });
+
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
 }
@@ -56,7 +60,8 @@ module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
     switch (type) {
-        case "active" || "inactive":
+        case "inactive":
+        case "active":
             await Product.updateMany({
                 _id: {
                     $in: ids
@@ -64,6 +69,7 @@ module.exports.changeMulti = async (req, res) => {
             }, {
                 status: type
             });
+            req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
             break;
         case "delete-all":
             await Product.updateMany({
