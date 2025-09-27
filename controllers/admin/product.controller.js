@@ -92,7 +92,8 @@ module.exports.changeMulti = async (req, res) => {
                     position: position
                 });
             }
-            default:
+            req.flash('success', `Thay đổi vị trí thành công ${ids.length} sản phẩm!`);
+        default:
                 break;
     }
     const backURL = req.get('Referer');
