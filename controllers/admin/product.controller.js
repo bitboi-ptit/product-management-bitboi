@@ -2,6 +2,7 @@ const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
+const systemConfig=require("../../config/system");
 //[Get] /admin/products
 module.exports.index = async (req, res) => {
     const filterStatus = filterStatusHelper(req.query);
@@ -84,17 +85,19 @@ module.exports.changeMulti = async (req, res) => {
             break;
         case "change-position":
             for (const item of ids) {
-                const [id, position] = item.split("-");
+                let [id, position] = item.split("-");
                 position = parseInt(position);
-                await Product.updateMany({
-                    id: id
+                console.log(position);
+                await Product.updateOne({
+                    _id: id
                 }, {
                     position: position
                 });
             }
             req.flash('success', `Thay đổi vị trí thành công ${ids.length} sản phẩm!`);
+            break;
         default:
-                break;
+            break;
     }
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
@@ -115,4 +118,27 @@ module.exports.deleteItem = async (req, res) => {
     req.flash('success', `Đã xóa thành công sản phẩm!`);
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
+}
+//[GET] /admin/products/create
+module.exports.create = async (req, res) => {
+    res.render("admin/pages/product/create", {
+        pageTitle: "Thêm mới sản phẩm"
+    });
+}
+//[POST] /admin/products/create
+module.exports.createPost = async (req, res) => {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+
+    if (req.body.position) {
+        req.body.position = parseInt(req.body.position);
+    } else {
+        const countProducts = await Product.countDocuments();
+        req.body.position = countProducts + 1;
+    }
+    const product=new Product(req.body);
+    await product.save();
+    
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
