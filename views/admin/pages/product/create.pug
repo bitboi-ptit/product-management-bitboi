@@ -7,6 +7,7 @@ block main
         action=`${prefixAdmin}/products/create`
         id="form-create-product"
         method="POST"
+        enctype="multipart/form-data"
     ) 
         div(class="form-group")
             label(for="title") Tiêu đề
@@ -56,6 +57,15 @@ block main
                 min="0"
             ) 
         div(class="form-group")
+            label(for="thumbnail") Ảnh
+            input(
+                type="file"
+                class="form-control"
+                id="thumbnail"
+                name="thumbnail"
+                accept="image/*"
+            ) 
+        div(class="form-group")
             label(for="position") Vị trí
             input(
                 type="number"
@@ -74,7 +84,7 @@ block main
                 value="active"
                 checked
             )
-            label(for="statusActive" class="form-check-label") Hoạt động
+            label(for="statusActive" class="form-label") Hoạt động
         div(class="form-group form-check form-check-inline")
             input(
                 type="radio"
@@ -83,7 +93,7 @@ block main
                 name="status"
                 value="inactive"
             )
-            label(for="statusInActive" class="form-check-label") Dừng hoạt động
+            label(for="statusInActive" class="form-label") Dừng hoạt động
             
         div(class="form-group")
             button(
