@@ -127,19 +127,22 @@ module.exports.create = async (req, res) => {
 }
 //[POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-        req.body.price = parseInt(req.body.price);
-        req.body.discountPercentage = parseInt(req.body.discountPercentage);
-        req.body.stock = parseInt(req.body.stock);
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
 
-        if (req.body.position) {
-            req.body.position = parseInt(req.body.position);
-        } else {
-            const countProducts = await Product.countDocuments();
-            req.body.position = countProducts + 1;
-        }
-        req.body.thumbnail=`/uploads/${req.file.filename}`;
+    if (req.body.position) {
+        req.body.position = parseInt(req.body.position);
+    } else {
+        const countProducts = await Product.countDocuments();
+        req.body.position = countProducts + 1;
+    }
+    if (req.file) {
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    }
 
-        const product=new Product(req.body);
-        await product.save();
+
+    const product = new Product(req.body);
+    await product.save();
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
