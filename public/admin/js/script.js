@@ -26,7 +26,7 @@ if (buttonsStatus.length > 0) {
 
 //form-search
 const formSearch = document.querySelector("#form-search");
-if (formSearch.length) {
+if (formSearch) {
     let url = new URL(window.location.href);
     formSearch.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -41,6 +41,7 @@ if (formSearch.length) {
     });
 }
 //end form-search
+
 //pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
 if (buttonsPagination) {
@@ -136,3 +137,21 @@ if (showAlert) {
     });
 }
 // End show-alert
+
+// Upload Image
+
+const uploadImage = document.querySelector("[upload-image]");
+if (uploadImage) {
+    const uploadImageInput = document.querySelector("[ upload-image-input]");
+    const uploadImagePreview = document.querySelector("[upload-image-preview]");
+
+    uploadImageInput.addEventListener("change",()=>{
+        const [file]=uploadImageInput.files;
+        console.log(file);
+        if(file){
+            uploadImagePreview.src=URL.createObjectURL(file);
+        }
+    })
+}
+
+// End Upload Image

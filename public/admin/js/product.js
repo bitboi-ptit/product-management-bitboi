@@ -37,4 +37,5 @@ if (buttonDelete.length > 0) {
         })
     });
 }
+
 //End delete item
