@@ -147,7 +147,6 @@ if (uploadImage) {
 
     uploadImageInput.addEventListener("change",()=>{
         const [file]=uploadImageInput.files;
-        console.log(file);
         if(file){
             uploadImagePreview.src=URL.createObjectURL(file);
         }
