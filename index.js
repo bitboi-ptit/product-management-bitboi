@@ -32,7 +32,7 @@ const port = process.env.PORT;
 database.connect();
 
 //Pug
-app.set('views', './views');
+app.set('views', `${__dirname}./views`);
 app.set('view engine', 'pug');
 //End Pug
 
@@ -42,7 +42,10 @@ app.use(bodyParser.urlencoded());
 // App locals variable
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
-app.use(express.static("public"));
+console.log("hi");
+console.log(__dirname);
+console.log("hi");
+app.use(express.static(`${__dirname}/public`));
 clientRoute(app);
 adminRoute(app);
 app.listen(port, () => {
