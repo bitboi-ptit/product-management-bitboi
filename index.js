@@ -32,7 +32,7 @@ const port = process.env.PORT;
 database.connect();
 
 //Pug
-app.set('views', `${__dirname}./views`);
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 //End Pug
 
