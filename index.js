@@ -1,4 +1,7 @@
 const express = require("express");
+//dotenv
+require('dotenv').config();
+//End dotenv
 const methodOverride = require('method-override')
 const app = express();
 const bodyParser = require('body-parser');
@@ -17,16 +20,16 @@ app.use(methodOverride('_method'));
 //flash
 app.use(cookieParser('fjfjfj'));
 app.use(session({
+    saveUninitialized:false,
+    resave: false,
     cookie: {
-        maxAge: 60000
+        maxAge: 60000 
     }
 }));
 app.use(flash());
 //End flash
 
-//dotenv
-require('dotenv').config();
-//End dotenv
+
 
 const port = process.env.PORT;
 database.connect();
@@ -42,9 +45,6 @@ app.use(bodyParser.urlencoded());
 // App locals variable
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
-console.log("hi");
-console.log(__dirname);
-console.log("hi");
 app.use(express.static(`${__dirname}/public`));
 clientRoute(app);
 adminRoute(app);
