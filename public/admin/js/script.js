@@ -145,12 +145,45 @@ if (uploadImage) {
     const uploadImageInput = document.querySelector("[ upload-image-input]");
     const uploadImagePreview = document.querySelector("[upload-image-preview]");
 
-    uploadImageInput.addEventListener("change",()=>{
-        const [file]=uploadImageInput.files;
-        if(file){
-            uploadImagePreview.src=URL.createObjectURL(file);
+    uploadImageInput.addEventListener("change", () => {
+        const [file] = uploadImageInput.files;
+        if (file) {
+            uploadImagePreview.src = URL.createObjectURL(file);
         }
     })
 }
 
 // End Upload Image
+
+//Sort
+const sort = document.querySelector("[sort]");
+if (sort) {
+    let url = new URL(window.location.href);
+    const sortSelect = sort.querySelector("[sort-select]");
+    const sortClear = sort.querySelector("[sort-clear]");
+
+    sortSelect.addEventListener("change", (e) => {
+        const [sortKey, sortValue] = e.target.value.split("-");
+        url.searchParams.set("sortKey", sortKey);
+        url.searchParams.set("sortValue", sortValue);
+
+        window.location.href = url.href;
+    });
+    sortClear.addEventListener("click", () => {
+        url.searchParams.delete("sortKey");
+        url.searchParams.delete("sortValue");
+
+        window.location.href = url.href;
+    })
+
+    //Thêm attribute selected cho option
+    const sortKey = url.searchParams.get("sortKey");
+    const sortValue = url.searchParams.get("sortValue");
+
+    if(sortKey&&sortValue){
+        const stringSort = `${sortKey}-${sortValue}`;
+        const optionSelected=sortSelect.querySelector(`option[value=${stringSort}]`);
+        optionSelected.setAttribute("selected",true);
+    }
+}
+//End Sort

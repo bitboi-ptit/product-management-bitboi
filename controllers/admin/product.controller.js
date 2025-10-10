@@ -17,7 +17,7 @@ module.exports.index = async (req, res) => {
     if (objectSearch.regex) {
         find.title = objectSearch.regex;
     }
-    //---------
+    //Pagination
     const countProducts = await Product.countDocuments(find);
     let objectPagination = await paginationHelper({
             limitItems: 4,
@@ -25,11 +25,19 @@ module.exports.index = async (req, res) => {
         },
         req.query,
         countProducts);
-    //----------
+    //End Pagination
+
+    // Sort
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
+    } else {
+        sort.position = "desc";
+
+    }
+    // Sort
     const products = await Product.find(find)
-        .sort({
-            position: "desc"
-        })
+        .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
 
@@ -137,7 +145,7 @@ module.exports.createPost = async (req, res) => {
         const countProducts = await Product.countDocuments();
         req.body.position = countProducts + 1;
     }
-    
+
     const product = new Product(req.body);
     await product.save();
     res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -163,17 +171,19 @@ module.exports.edit = async (req, res) => {
 module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
     req.body.price = parseInt(req.body.price);
-    req.body.discountPercentage =parseFloat(req.body.discountPercentage);
+    req.body.discountPercentage = parseFloat(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
     req.body.position = parseInt(req.body.position);
     if (req.file) {
         req.body.thumbnail = `/uploads/${req.file.filename}`;
     }
     try {
-        await Product.updateOne({_id:id},req.body);
-        req.flash("success","Cập nhật thành công!!");
+        await Product.updateOne({
+            _id: id
+        }, req.body);
+        req.flash("success", "Cập nhật thành công!!");
     } catch (error) {
-        req.flash("error","Cập nhật thất bại!!");
+        req.flash("error", "Cập nhật thất bại!!");
     }
     const backURL = req.get('Referer');
     res.redirect(`${backURL}`);
