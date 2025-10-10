@@ -2,6 +2,7 @@ const express = require("express");
 //dotenv
 require('dotenv').config();
 //End dotenv
+const path = require('path');
 const methodOverride = require('method-override')
 const app = express();
 const bodyParser = require('body-parser');
@@ -41,6 +42,11 @@ app.set('view engine', 'pug');
 
 //Parse req body
 app.use(bodyParser.urlencoded());
+
+//tinymce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+//End tinymce
+
 
 // App locals variable
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
