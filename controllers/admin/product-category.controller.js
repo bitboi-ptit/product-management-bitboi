@@ -52,7 +52,7 @@ module.exports.edit = async (req, res) => {
         const records = await ProductCategory.find({
             deleted: false
         });
-        const newRecords = createTree.tree(records);
+        const newRecords = createTreeHelper.tree(records);
         res.render("admin/pages/products-category/edit", {
             pageTitle: "Chỉnh sửa danh mục sản phẩm",
             data: data,
