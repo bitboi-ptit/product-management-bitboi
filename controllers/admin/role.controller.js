@@ -43,13 +43,45 @@ module.exports.edit = async (req, res) => {
 //[PATCH]admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
     try {
-        const id =req.params.id;
-        await Role.updateOne({_id:id},req.body);
-        
+        const id = req.params.id;
+        await Role.updateOne({
+            _id: id
+        }, req.body);
+
         req.flash('success', 'Cập nhật thành công!');
     } catch (error) {
         req.flash('error', 'Cập nhật không thành công!');
     }
-    const backURL= req.get('Referer');
+    const backURL = req.get('Referer');
+    res.redirect(`${backURL}`);
+};
+//[GET]admin/roles/permission
+module.exports.permission = async (req, res) => {
+    let find = {
+        deleted: false
+    }
+    const records = await Role.find(find);
+    res.render("admin/pages/roles/permission", {
+        pageTitle: "Phân quyền",
+        records: records
+    });
+};
+//[PATCH]admin/roles/permission
+module.exports.permissionPatch = async (req, res) => {
+    try {
+        const permissions = JSON.parse(req.body.permissions);
+        permissions.forEach(async item => {
+            await Role.updateOne({
+                _id: item.id
+            }, {
+                permission: item.permissions
+            });
+        });
+        req.flash("success", "Cập nhật thành công");
+    } catch (error) {
+        req.flash("error","Cập nhật không thành công");
+    }
+
+    const backURL = req.get("Referer");
     res.redirect(`${backURL}`);
 };

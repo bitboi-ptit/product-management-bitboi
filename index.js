@@ -30,10 +30,10 @@ app.use(session({
 app.use(flash());
 //End flash
 
-
-
+//Connect Database
 const port = process.env.PORT;
 database.connect();
+//End Connect Database
 
 //Pug
 app.set('views', `${__dirname}/views`);

@@ -5,6 +5,7 @@ const dashboardRoutes = require("./dashboard.route");
 const productRoutes = require("./product.route");
 const productCategoryRoutes = require("./product-category.route");
 const roleRoutes = require("./role.route");
+const accountRoutes = require("./account.route");
 //const systemConfig = require("../../config/system");
 module.exports = (app) => {
     //const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -12,4 +13,5 @@ module.exports = (app) => {
     app.use(`${prefixAdmin}/products`, productRoutes);
     app.use(`${prefixAdmin}/products-category`, productCategoryRoutes);
     app.use(`${prefixAdmin}/roles`, roleRoutes);
+    app.use(`${prefixAdmin}/accounts`, accountRoutes);
 }
