@@ -11,10 +11,10 @@ module.exports.index = async (req, res) => {
     const records = await Account.find(find).select("-password -token");
     for (const record of records) {
         const role = await Role.findOne({
-            deleted:false,
+            deleted: false,
             _id: record.role_id
         });
-        record.role=role;
+        record.role = role;
     }
     res.render("admin/pages/accounts/index", {
         pageTitle: "Danh sách tài khoản",
@@ -38,14 +38,66 @@ module.exports.createPost = async (req, res) => {
         deleted: false
     });
     if (emailExist) {
-        req.flash("error",`Email ${req.body.email} đã tồn tại`);
-        const backURL=req.get('Referer');
+        req.flash("error", `Email ${req.body.email} đã tồn tại`);
+        const backURL = req.get('Referer');
         res.redirect(backURL);
     } else {
         req.body.password = md5(req.body.password);
+        console.log(req.body.password);
         const record = new Account(req.body);
-        record.save();
+        await record.save();
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 
 };
+//[GET]admin/accounts/edit/:id
+module.exports.edit = async (req, res) => {
+    let find = {
+        deleted: false,
+        _id: req.params.id
+    }
+    try {
+        const data = await Account.findOne(find);
+        const roles = await Role.find({
+            deleted: false
+        });
+        res.render("admin/pages/accounts/edit", {
+            pageTitle: "Chỉnh sửa tài khoản",
+            data: data,
+            roles: roles
+        });
+
+    } catch (error) {
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`)
+    }
+}
+//[PATCH]admin/accounts/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    const emailExist = await Account.findOne({
+        _id: { // ne = not equal
+            $ne: id
+        },
+        email: req.body.email,
+        deleted: false
+    });
+    if (emailExist) {
+        req.flash("error", `Email ${req.body.email} đã tồn tại`);
+    } else {
+        if (req.body.password) {
+            req.body.password = md5(req.body.password);
+        } else {
+            delete req.body.password;
+        }
+        try {
+            await Account.updateOne({
+                _id: id
+            }, req.body);
+            req.flash("success", "Cập nhật thành công");
+        } catch (error) {
+            req.flash("error", "Cập nhật thất bại");
+        }
+    }
+    const backURL = req.get('Referer');
+    res.redirect(backURL);
+}

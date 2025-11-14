@@ -19,3 +19,18 @@ module.exports.createPost = (req, res, next) => {
     }
     next();
 }
+module.exports.editPatch = (req, res, next) => {
+    if (!req.body.fullName) {
+        req.flash("error", "Vui lòng nhập Họ Tên !!");
+        const backURL = req.get('Referer');
+        res.redirect(`${backURL}`);
+        return;
+    }
+    if (!req.body.email) {
+        req.flash("error", "Vui lòng nhập Email !!");
+        const backURL = req.get('Referer');
+        res.redirect(`${backURL}`);
+        return;
+    }
+    next();
+}

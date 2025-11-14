@@ -9,9 +9,22 @@ const uploadCloud = require("../../middlewares/uploadCloud.middleware");
 router.get("/", controller.index);
 router.get("/create", controller.create);
 router.post(
-    "/create", 
+    "/create",
     upload.single('avatar'),
     uploadCloud.upload,
-    validate.createPost, 
+    validate.createPost,
     controller.createPost);
+router.get(
+    "/edit/:id",
+    upload.single('avatar'),
+    uploadCloud.upload,
+    controller.edit 
+)
+router.patch(
+    "/edit/:id",
+    upload.single('avatar'),
+    uploadCloud.upload,
+    validate.editPatch,
+    controller.editPatch
+)
 module.exports = router;
