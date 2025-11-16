@@ -2,11 +2,19 @@ const Account = require("../../models/account.model");
 const md5 = require("md5");
 const systemConfig = require("../../config/system");
 
+//[GET] admin/auth/login
 module.exports.login = (req, res) => {
-    res.render("admin/pages/auth/login", {
-        pageTitle: "Đăng nhập"
-    })
+    const token = req.cookies.token;
+    if (token) {
+        res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+    } else {
+        res.render("admin/pages/auth/login", {
+            pageTitle: "Đăng nhập"
+        })
+    }
+
 }
+//[POST] admin/auth/login
 module.exports.loginPost = async (req, res) => {
     const {
         email,
@@ -16,7 +24,6 @@ module.exports.loginPost = async (req, res) => {
         email: email,
         deleted: false
     });
-    console.log(user)
     if (!user) {
         req.flash("error", "Email không tồn tại");
         const backURL = req.get("Referer");
@@ -35,9 +42,14 @@ module.exports.loginPost = async (req, res) => {
         req.flash("error", "Tài khoản đã bị khóa");
         const backURL = req.get("Referer");
         res.redirect(`${backURL}`);
-        
+
         return;
     }
-    res.cookie("token",user.token);
+    res.cookie("token", user.token);
     res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+}
+//[GET] admin/auth/logout
+module.exports.logout = (req, res) => {
+    res.clearCookie("token");
+    res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
 }
