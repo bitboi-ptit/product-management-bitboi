@@ -100,7 +100,10 @@ module.exports.changeMulti = async (req, res) => {
                 }
             }, {
                 deleted: true,
-                deletedAt: new Date()
+                deletedBy: {
+                    account_id: res.locals.user._id,
+                    deletedAt: new Date()
+                }
             });
             req.flash('success', `Đã xóa thành công ${ids.length} sản phẩm!`);
             break;
@@ -134,7 +137,11 @@ module.exports.deleteItem = async (req, res) => {
         _id: id
     }, {
         deleted: true,
-        deletedAt: new Date()
+        // deletedAt: new Date()
+        deletedBy: {
+            account_id: res.locals.user._id,
+            deletedAt: new Date()
+        }
     });
     req.flash('success', `Đã xóa thành công sản phẩm!`);
     const backURL = req.get('Referer');
@@ -165,7 +172,7 @@ module.exports.createPost = async (req, res) => {
         const countProducts = await Product.countDocuments();
         req.body.position = countProducts + 1;
     }
-    req.body.createdBy ={
+    req.body.createdBy = {
         account_id: res.locals.user._id
     }
     const product = new Product(req.body);
@@ -180,7 +187,7 @@ module.exports.edit = async (req, res) => {
             _id: req.params.id
         };
         const product = await Product.findOne(find);
-        
+
         const category = await ProductCategory.find({
             deleted: false
         });
@@ -188,7 +195,7 @@ module.exports.edit = async (req, res) => {
         res.render("admin/pages/product/edit", {
             pageTitle: "Chỉnh sửa sản phẩm",
             product: product,
-            category:newcategory
+            category: newcategory
         });
     } catch (error) {
         res.redirect(`${systemConfig.prefixAdmin}/products`);

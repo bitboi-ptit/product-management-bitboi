@@ -106,12 +106,12 @@ block main
                                 href=`${prefixAdmin}/products/detail/${item.id}`
                                 class="btn btn-secondary btn-sm"
                                 ) Chi tiết
-                                if(role.permission.includes("products_view_edit"))
+                                if(role.permission.includes("products_edit"))
                                     a(
                                         href=`${prefixAdmin}/products/edit/${item.id}`
                                         class="btn btn-warning btn-sm ms-1"
                                         ) Sửa
-                                if(role.permission.includes("products_view_delete"))
+                                if(role.permission.includes("products_delete"))
                                     button(
                                         class="btn btn-danger btn-sm ms-1"
                                         button-delete
