@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 block main 
     if(role.permission.includes("products_view"))
         h1 Trang Danh sách sản phẩm
@@ -50,6 +51,7 @@ block main
                             th Tiêu đề
                             th Giá
                             th Vị trí
+                            th Người tạo
                             th Trạng thái 
                             th Hành Động 
                     tbody 
@@ -78,6 +80,10 @@ block main
                                     min="1"
                                     name="position"
                                 )
+                            td 
+                                p #{item.accoutFullName}
+                                p
+                                    +formatDateTime(item.createdBy.createdAt)
                             td 
                                 if(role.permission.includes("products_edit"))
                                     if(item.status=="active")

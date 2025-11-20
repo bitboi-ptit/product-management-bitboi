@@ -3,7 +3,7 @@ const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const productSchema = new mongoose.Schema({
     title: String,
-    product_category_id:{
+    product_category_id: {
         type: String,
         default: ""
     },
@@ -18,6 +18,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         slug: "title",
         unique: true
+    },
+    createdBy: {
+        account_id: String,
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
     },
     deleted: {
         type: Boolean,

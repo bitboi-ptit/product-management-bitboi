@@ -5,6 +5,7 @@ const paginationHelper = require("../../helpers/pagination");
 const systemConfig = require("../../config/system");
 const ProductCategory = require("../../models/product-category.model");
 const createTreeHelper = require("../../helpers/createTree");
+const Account = require("../../models/account.model");
 
 //[Get] /admin/products
 module.exports.index = async (req, res) => {
@@ -44,6 +45,14 @@ module.exports.index = async (req, res) => {
         .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
+    for (const item of products) {
+        const account = await Account.findOne({
+            _id: item.createdBy.account_id
+        });
+        if (account) {
+            item.accoutFullName = account.fullName;
+        }
+    }
 
     res.render("admin/pages/product/index", {
         pageTitle: "Trang danh sách sản phẩm",
@@ -156,7 +165,9 @@ module.exports.createPost = async (req, res) => {
         const countProducts = await Product.countDocuments();
         req.body.position = countProducts + 1;
     }
-
+    req.body.createdBy ={
+        account_id: res.locals.user._id
+    }
     const product = new Product(req.body);
     await product.save();
     res.redirect(`${systemConfig.prefixAdmin}/products`);
