@@ -1,6 +1,8 @@
-mixin formatDateTime(time)
+mixin formatDateTime(time) 
     span #{moment(time).format('DD/MM/YYYY HH:mm:ss')}
 mixin formatDate(time)
     span #{moment(time).format('DD/MM/YYYY')}
 mixin formatTime(time)
     span #{moment(time).format('HH:mm:ss')}
+
+//- nếu time là undifined hoặc null(khi không truyền tham số) thì nó sẽ tự lấy time hiện tại 
